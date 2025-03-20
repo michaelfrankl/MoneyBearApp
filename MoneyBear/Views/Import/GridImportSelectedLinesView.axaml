@@ -1,0 +1,98 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels.Import"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" Width="800" Height="450"
+        x:Class="MoneyBear.Views.Import.GridImportSelectedLinesView"
+        x:DataType="vm:GridImportSelectedLinesViewModel"
+        Title="Definierte Zeilenwerte importieren">
+
+    <Design.DataContext>
+        <vm:GridImportSelectedLinesViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="15" Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Label Margin="0 2 0 0" Content="Importzeit wählen: ">
+                <ToolTip.Tip>
+                    Bei dem Zeitpunkt, ist der Monat sowie das Jahr relevant, der Tag ist hier irrelevant!
+                </ToolTip.Tip>
+            </Label>
+
+            <CalendarDatePicker Margin="5 -5 0 0" DisplayDateStart="{Binding DisplayDateStart}"
+                                DisplayDateEnd="{Binding DisplayDateEnd}"
+                                SelectedDate="{Binding SelectedDate}"
+                                HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+            </CalendarDatePicker>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
+            <TextBox Margin="2 0 0 2" Width="300" Text="{Binding SearchText}" 
+                     Watermark="Suchen..."
+                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"></TextBox>
+            <ListBox ItemsSource="{Binding PreviewGridLines}"
+                     SelectedValue="{Binding SelectedPreviewGridLine}"
+                     Height="300" Width="300"
+                     DisplayMemberBinding="{Binding Name}"/>
+        </StackPanel>
+        
+        <StackPanel Margin="50 75 50 0" Grid.Row="2" Grid.Column="1" Orientation="Vertical">
+            <Button Command="{Binding AddLineCmd}">
+                <Button.Content>
+                    <icon:Icon Value="fa-solid fa-circle-right"/>
+                </Button.Content>
+                <ToolTip.Tip>
+                    Fügt die ausgewählte Zeile zur Importliste hinzu!
+                </ToolTip.Tip>
+            </Button>
+            <Button Margin="0 10 0 0" Command="{Binding RemoveLineCmd}"
+                    IsEnabled="{Binding IsRemovingAllowed}">
+                <Button.Content>
+                    <icon:Icon Value="fa-solid fa-circle-left"/>
+                </Button.Content>
+                <ToolTip.Tip>
+                    Entfernt die ausgewählte Zeile aus der Importliste!
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Vertical">
+            <ListBox ItemsSource="{Binding SelectedLines}"
+                     SelectedValue="{Binding SelectedSelectedGridLine}"
+                     Height="300" Width="300"
+                     DisplayMemberBinding="{Binding Name}"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsTaskActive}" 
+                             Height="20">
+                <ToolTip.Tip>
+                    Speicherung in der Datenbank erfolgt!
+                </ToolTip.Tip>
+            </ui:ProgressRing>
+            <Button Content="Importieren" Command="{Binding ImportSelectedLinesCmd}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Führt den Import für die ausgewählten Zeilen aus!
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

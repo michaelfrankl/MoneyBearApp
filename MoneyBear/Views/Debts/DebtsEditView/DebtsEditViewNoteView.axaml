@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels.DebtsEditView"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="350" Width="450" Height="350"
+        x:Class="MoneyBear.Views.Debts.DebtsEditView.DebtsEditViewNoteView"
+        x:DataType="vm:DebtsEditViewNoteViewModel"
+        Title="{Binding WindowTitle}">
+
+    <Design.DataContext>
+        <vm:DebtsEditViewNoteViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10" Orientation="Vertical">
+            <HeaderedContentControl Header="Notiz">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Width="400" Height="230"
+                                 IsEnabled="{Binding EditingAllowed}"
+                                 AcceptsReturn="True" TextWrapping="Wrap"
+                                 HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
+                                 Text="{Binding SelectedDebtNote}" />
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                        <Button Margin="5 0 0 0" Background="Red"
+                                IsEnabled="{Binding EditingAllowed}"
+                                Command="{Binding DeleteNoteCmd}">
+                            <Button.Content>
+                                <icon:Icon Value="fa-solid fa-trash" />
+                            </Button.Content>
+                            <ToolTip.Tip>
+                                Löscht das aktuelle Kommentar!
+                            </ToolTip.Tip>
+                        </Button>
+                        <Label Margin="240 0 0 0" Content="{Binding SelectedDebtNoteCount}" />
+                        <Label Content="/" />
+                        <Label Content="1024" />
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0 " Orientation="Horizontal">
+                        <Label IsVisible="{Binding IsMaxNoteCount}" 
+                               Content="Die maximale Anzahl an Zeichen wurde überschritten!"
+                               Foreground="Red"/>
+                    </StackPanel>
+                </StackPanel>
+            </HeaderedContentControl>
+            <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                <Button Content="Speichern" IsEnabled="{Binding EditingAllowed}" 
+                        Command="{Binding SaveNoteCmd}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <Button Margin="5 0 0 0" Content="Abbrechen"
+                        Command="{Binding CancelNoteCmd}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+
+</Window>

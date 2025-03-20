@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MoneyBear.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MoneyBear.Views.MainView"
+        x:DataType="vm:MainWindowViewModel">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 15 0 ">
+            <Label Margin="0 2 0 0" Content="{Binding AppService.TaskInfo}"
+                   IsVisible="{Binding AppService.IsTaskInfoVisible}"
+                   FontSize="10" FontWeight="Bold">
+                <ToolTip.Tip>
+                    Beschreibt die aktuell ausführende Aufgabe!
+                </ToolTip.Tip>
+            </Label>
+            <Label Content=" " IsVisible="{Binding AppService.IsTaskInfoVisible}"/>
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding AppService.IsTaskProgressRingVisible}" 
+                             Height="20"></ui:ProgressRing>
+        </StackPanel>
+        
+        <ui:NavigationView Grid.Row="1" x:Name="NavViewControl"
+                           PaneDisplayMode="Left"
+                           MenuItemsSource="{Binding NavItems}"
+                           SelectedItem="{Binding CurrentNavItem}"
+                           IsSettingsVisible="True"
+                           SelectionChanged="NavViewControl_OnSelectionChanged"
+                           Content="{Binding CurrentView}">
+        </ui:NavigationView>
+    </Grid>
+    
+</UserControl>

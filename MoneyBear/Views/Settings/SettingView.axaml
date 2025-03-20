@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:MoneyBear.ViewModels"
+             xmlns:icon="https://github.com/projektanker/icons.avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:CompileBindings="False"
+             x:Class="MoneyBear.Views.SettingView">
+    
+    <Design.DataContext>
+        <vm:SettingViewModel/>
+    </Design.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Menu>
+                <MenuItem Header="Benutzerverwaltung">
+                    <MenuItem Header="Benutzer hinzufügen" Command="{Binding OpenAddUserCmd}" 
+                              IsVisible="{Binding AppService.IsAdmin}"/>
+                    <MenuItem Header="Benutzer bearbeiten" Command="{Binding OpenEditUserCmd}"/>
+                    <MenuItem Header="Abmelden">
+                        <Button Content="Abmelden" Command="{Binding LogoutCmd}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Importeinstellungen">
+                    <MenuItem Header="Default Importwerte" Command="{Binding OpenAddImportValuesView}"/>
+                </MenuItem>
+                <MenuItem Header="Exporteinstellungen"/>
+            </Menu>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <Separator Background="DarkGray"/>
+        </StackPanel>
+        <StackPanel Margin="10 0 0 0" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left">
+            <HeaderedContentControl Header="Benutzerinformationen">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Eingeloggter Nutzer:"/>
+                        <Label Content="{Binding AppService.User.Name}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Zugeteilte Rolle:"/>
+                        <Label Content="{Binding AppService.User.Role}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                        <Label Content="Aktuelle IPv4-Adresse: "/>
+                        <TextBox Margin="0 -5 0 0" Text="{Binding CurrentIPv4Address}"
+                                 IsEnabled="False" Height="25" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                 PasswordChar="{Binding HiddenChar}"/>
+                        <Button Margin="2 -5 0 0" Width="40" Height="25"
+                                Command="{Binding HideIpAddressCmd}">
+                            <Button.Content>
+                                <icon:Icon Value="{Binding HiddenIcon}"/>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Import durchgeführt: "/>
+                        <Label Content="{Binding LatestAutoImport}"></Label>
+                    </StackPanel>
+                </StackPanel>
+            </HeaderedContentControl>
+           
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,85 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels.Home"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400" Width="800" Height="400"
+        x:Class="MoneyBear.Views.Home.HomeOverViewEditorView"
+        x:DataType="vm:HomeOverViewEditorViewModel"
+        Title="{Binding WindowTitle}">
+
+    <Design.DataContext>
+        <vm:HomeOverViewEditorViewModel />
+    </Design.DataContext>
+
+    <StackPanel Margin="20 20 0 0 ">
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Alle Zeilen entfernen" Command="{Binding RemoveAllLinesCmd}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Entfernt alle selektieren Zeilen!
+                </ToolTip.Tip>
+            </Button>
+            <Button Margin="15 0 0 0" Content="Kontostände" Command="{Binding AddDebitLinesCmd}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Ersetzt die aktuellen Zeilen mit den vorhandenen Zeilen, welche als "Kontostand" markiert sind!
+                </ToolTip.Tip>
+            </Button>
+            <Button Margin="15 0 0  0" Content="Ausgaben" Command="{Binding AddOutgoingLinesCmd}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Ersetzt die aktuellen Zeilen mit den vorhandenen Zeilen, welche als "Ausgaben" markiert sind!
+                </ToolTip.Tip>
+            </Button>
+            <Button Margin="15 0 0  0" Content="Zeilen laden" Command="{Binding AddSavedLinesCmd}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Ersetzt die aktuellen Zeilen mit den gespeicherten Zeilen!
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+        <StackPanel Margin="0 10 0 0 " Orientation="Horizontal">
+            <TextBox Width="250" Height="25" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                     Text="{Binding SearchText}" Watermark="Suchen..."></TextBox>
+        </StackPanel>
+        <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+            <ListBox ItemsSource="{Binding GridLinePreview}"
+                     DisplayMemberBinding="{Binding Name}" Height="250" Width="250"
+                     SelectedValue="{Binding SelectedPreviewGridLine}"/>
+            <StackPanel Margin="50 75 50 0" Grid.Row="2" Grid.Column="1" Orientation="Vertical">
+                <Button Command="{Binding AddSelectedGridLineCmd}"
+                        IsEnabled="{Binding !IsTaskActive}">
+                    <Button.Content>
+                        <icon:Icon Value="fa-solid fa-circle-right"/>
+                    </Button.Content>
+                    <ToolTip.Tip>
+                        Fügt die ausgewählte Zeile zur Importliste hinzu!
+                    </ToolTip.Tip>
+                </Button>
+                <Button Margin="0 10 0 0" Command="{Binding RemoveSelectedGridLineCmd}"
+                        IsEnabled="{Binding !IsTaskActive}">
+                    <Button.Content>
+                        <icon:Icon Value="fa-solid fa-circle-left"/>
+                    </Button.Content>
+                    <ToolTip.Tip>
+                        Entfernt die ausgewählte Zeile aus der Importliste!
+                    </ToolTip.Tip>
+                </Button>
+            </StackPanel>
+            <ListBox ItemsSource="{Binding SelectedGridLines}" 
+                     DisplayMemberBinding="{Binding Name}" Height="250" Width="250"
+                     SelectedValue="{Binding SelectedGridLine}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsTaskActive}" 
+                             Height="20"/>
+            <Button Margin="0 0 25 0" Content="Speichern" IsEnabled="{Binding !IsTaskActive}" 
+                    Command="{Binding SaveSelectedLinesToDBCmd}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        </StackPanel>
+    </StackPanel>
+
+</Window>

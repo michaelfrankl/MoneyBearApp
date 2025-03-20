@@ -1,0 +1,206 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:MoneyBear.ViewModels"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:model="clr-namespace:NASPLOID.Models.MoneyBear;assembly=NASPLOID"
+             xmlns:icon="https://github.com/projektanker/icons.avalonia"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
+             x:Class="MoneyBear.Views.GridView"
+             x:CompileBindings="True"
+             x:DataType="vm:GridViewModel">
+
+    <Design.DataContext>
+        <vm:GridViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel HorizontalAlignment="Left">
+                <Menu>
+                    <MenuItem Header="Start">
+                        <MenuItem Header="Drucken" />
+                    </MenuItem>
+                    <MenuItem Header="Zeilenverwaltung">
+                        <MenuItem Header="Zeile bearbeiten" Command="{Binding EditGridLineCmd}" />
+                        <MenuItem Header="Zeile hinzufügen" Command="{Binding AddNewGridLineCmd}" />
+                    </MenuItem>
+                    <MenuItem Header="Import">
+                        <MenuItem Header="Alle Zeilenwerte importieren" Command="{Binding  ImportData}" />
+                        <MenuItem Header="Definierte Zeilenwerte importieren" Command="{Binding ImportSelectedData}" />
+                        <MenuItem Header="Kontostand importieren" Command="{Binding ImportDebitData}" />
+                    </MenuItem>
+                    <MenuItem Header="Export">
+                        <MenuItem Header="PDF Export" />
+                    </MenuItem>
+                </Menu>
+            </StackPanel>
+
+            <Separator Grid.Row="1" HorizontalAlignment="Stretch" Height="5" />
+
+            <StackPanel Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal" Margin="5">
+                <CalendarDatePicker Name="GridDatePicker" DisplayDateStart="{Binding DisplayDateStart}"
+                                    DisplayDateEnd="{Binding DisplayDateEnd}"
+                                    SelectedDate="{Binding SelectedGridDate}"
+                                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+                <ComboBox Name="GridMonthsPreviewComboBox" Height="25" Width="150" Margin="5 0 0 0"
+                          ItemsSource="{Binding GridMonthPreviewItemsCB}"
+                          SelectedValue="{Binding SelectedGridMonthPreviewItemCB}"
+                          SelectedIndex="{Binding SelectedGridMonthPreviewItemsCBIndex}"
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+                </ComboBox>
+                <Button Name="CreateGridBtn" Margin="5 0 0 0" Command="{Binding CreateGridCmd}"
+                        Click="OnCreateGridBtnClick">
+                    <Button.Content>
+                        <icon:Icon Value="fa-solid fa-table" />
+                    </Button.Content>
+                    <ToolTip.Tip>
+                        Erzeugt das Grid mit den gesetzten Einstellungen!
+                    </ToolTip.Tip>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal">
+                <!--<Button IsVisible="True" Margin="5" Command="{Binding RefreshGridCmd}">
+                    <Button.Content>
+                        <icon:Icon Value="fa-solid fa-arrows-rotate" />
+                    </Button.Content>
+                    <ToolTip.Tip>
+                        Aktualisiert das Grid mit den gesetzten Einstellungen!
+                    </ToolTip.Tip>
+                </Button>-->
+                <TextBox Width="350" Watermark="Suchfeld..." HorizontalAlignment="Left"
+                         Text="{Binding SearchGridFilter}" HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center" />
+                <ComboBox Margin="5 0 0 0" Height="25" Width="150" ItemsSource="{Binding BuchungsFilterGridItemsCB}"
+                          SelectedValue="{Binding SelectedBuchungsFilterGridItem}"
+                          SelectedIndex="{Binding BuchungsFilterGridItemIndex}"
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+                <ComboBox Margin="5 0 0 0" Height="25" Width="150" ItemsSource="{Binding GridLineCategoriesItemsCB}"
+                          SelectedValue="{Binding SelectedGridLineCategory}"
+                          SelectedIndex="{Binding GridLineCategoryIndex}"
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Id}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+
+            <Separator Grid.Row="4" HorizontalAlignment="Stretch" Height="5" />
+
+            <StackPanel Grid.Row="5" HorizontalAlignment="Left">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <DataGrid MaxHeight="500" Margin="0 10  0 15" Name="GridViewDataGrid"
+                              CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                              AutoGenerateColumns="False" ItemsSource="{Binding GridViewData}"
+                              BeginningEdit="OnBeginningEdit" CellEditEnding="OnCellEditEnding"
+                              CellPointerPressed="GridViewDataGrid_OnCellPointerPressed"
+                              PreparingCellForEdit="OnPreparingCellForEdit">
+
+                        <!--<DataGrid.Columns>
+                       <DataGridTextColumn Header="Zeilenname" Binding="{Binding Name}"/>
+                       <DataGridTextColumn Header="Januar" Binding="{Binding JanuarValue}"/>
+                       <DataGridTextColumn Header="Februar" Binding="{Binding FebruarValue}"/>
+                       <DataGridTextColumn Header="März" Binding="{Binding MärzValue}"/>
+                       <DataGridTextColumn Header="April" Binding="{Binding AprilValue}"/>
+                   </DataGrid.Columns>-->
+
+                        <DataGrid.Styles>
+                            <Style Selector="DataGrid /template/ ScrollBar#PART_HorizontalScrollbar">
+                                <Setter Property="AllowAutoHide" Value="False" />
+                            </Style>
+                            <Style Selector="DataGrid /template/ ScrollBar#PART_VerticalScrollbar">
+                                <Setter Property="AllowAutoHide" Value="True" />
+                            </Style>
+                            <Style Selector="DataGrid /template/ DataGridRowsPresenter#PART_RowsPresenter">
+                                <Setter Property="Grid.RowSpan" Value="1" />
+                                <Setter Property="Grid.ColumnSpan" Value="3" />
+                            </Style>
+                        </DataGrid.Styles>
+                    </DataGrid>
+                </ScrollViewer>
+            </StackPanel>
+
+            <Separator Grid.Row="6" HorizontalAlignment="Stretch" Height="5" />
+
+            <StackPanel Grid.Row="7" HorizontalAlignment="Left">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Expander Header="Zeilenkommentar">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                                <Label Content="Monat: " />
+                                <Label Content="{Binding CurrentGridLineMonth}" />
+                                <Label Content="|" />
+                                <Label Content="Zeilenname: " />
+                                <Label Content="{Binding CurrentGridLineName}" />
+                            </StackPanel>
+                            <StackPanel Margin="0 15 0 0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                        Orientation="Horizontal">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                    <TextBox Text="{Binding CurrentGridLineComment}" AcceptsReturn="True"
+                                             TextWrapping="Wrap" Width="350" Height="150"
+                                             IsEnabled="{Binding IsCommentEditingAllowed}"
+                                             HorizontalContentAlignment="Left" VerticalContentAlignment="Top" />
+                                </ScrollViewer>
+                            </StackPanel>
+
+                            <StackPanel Margin="0 5 0 0" Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                                <Button IsEnabled="{Binding IsSavingAllowed}"
+                                        Command="{Binding SaveCommentCmd}">
+                                    <Button.Content>
+                                        <icon:Icon Value="fa-solid fa-floppy-disk" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        Speichert das aktuelle Kommentar für die selektierte Zeile!
+                                    </ToolTip.Tip>
+                                </Button>
+                                <Button Margin="5 0 0 0" Background="Red"
+                                        Command="{Binding DeleteCommentCmd}">
+                                    <Button.Content>
+                                        <icon:Icon Value="fa-solid fa-trash" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        Löscht das aktuelle Kommentar für die selektierte Zeile!
+                                    </ToolTip.Tip>
+                                </Button>
+                                <Label Margin="175 0 0 0" Content="{Binding CurrentCommentCount}" />
+                                <Label Content="/" />
+                                <Label Content="1024" />
+                            </StackPanel>
+                            <StackPanel Margin="0 5 0 0" Grid.Row="3" Grid.Column="0" Orientation="Horizontal"
+                                        IsVisible="{Binding IsCommentWarningVisible}">
+                                <Label Content="{Binding CommentWarningMessage}" Foreground="Red" />
+                            </StackPanel>
+                        </Grid>
+                    </Expander>
+                </ScrollViewer>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

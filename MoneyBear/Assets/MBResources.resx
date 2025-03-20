@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Auth" xml:space="preserve">
+        <value>Erfolgreich Authentifiziert!</value>
+    </data>
+    <data name="Credentials" xml:space="preserve">
+        <value>Anmeldedaten stimmen nicht überein! Bitte versuchen Sie es erneut!</value>
+    </data>
+    <data name="DBError" xml:space="preserve">
+        <value>Anmeldung bei der Datenbank aktuell nicht möglich!</value>
+    </data>
+    <data name="Ethernet" xml:space="preserve">
+        <value>Aktuell besteht ein Problem mit Ihrer Internetverbindung!</value>
+    </data>
+    <data name="Maintains" xml:space="preserve">
+        <value>Aktuell finden Wartungsarbeiten statt!</value>
+    </data>
+    <data name="MiscError" xml:space="preserve">
+        <value>Nicht berücksichtigte Komplikationen sind entstanden!</value>
+    </data>
+    <data name="NotValidInput" xml:space="preserve">
+        <value>Die Eingabe ist ungültig!</value>
+    </data>
+    <data name="NullReference" xml:space="preserve">
+        <value>Komplikationen mit der Dateistruktur sind entstanden!</value>
+    </data>
+    <data name="UserNotFound" xml:space="preserve">
+        <value>Benutzer wurde nicht gefunden!</value>
+    </data>
+</root>

@@ -1,0 +1,89 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels.Home"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:lc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450" Width="600" Height="450"
+        x:Class="MoneyBear.Views.Home.HomeChartColorEditorView"
+        x:DataType="vm:HomeChartColorEditorViewModel"
+        Title="{Binding WindowTitle}">
+
+    <Design.DataContext>
+        <vm:HomeChartColorEditorViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="35 0 0 0" Grid.Row="1" Grid.Column="0">
+            <TextBox Width="150" Watermark="Suchen.." Text="{Binding CategoryFilter}" 
+                     HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            <ListBox Margin="0 5 0 0" Width="150" Height="350" ItemsSource="{Binding Categories}"
+                     DisplayMemberBinding="{Binding Id}" 
+                     SelectedValue="{Binding SelectedCategory}"/>
+        </StackPanel>
+        <StackPanel Margin="50 20 0 0" Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 7 0 0" Content="Ausgewählte Kategorie:" />
+                <TextBox Margin="5 0 0 0" Text="{Binding SelectedCategory.Id}" 
+                         Width="150" Height="25" IsEnabled="False" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Margin="0 15 0 0" Orientation="Horizontal">
+                <Label Margin="0 10 0 0" Content="Farbe:" />
+                <ui:ColorPickerButton Margin="10 0 0 0" Width="100" Height="35" 
+                                      Color="{Binding DisplayedColor}">
+                    <ToolTip.Tip>
+                        Farbe wählen durch Palette oder mittel R/G/B, HSV wird nicht unterstützt!
+                    </ToolTip.Tip>
+                </ui:ColorPickerButton>
+            </StackPanel>
+            <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
+                <ColorPreviewer HsvColor="{Binding DisplayedColorBrush}"
+                                Width="250" Height="25">
+                </ColorPreviewer>
+            </StackPanel>
+            <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
+                <Label Content="R: " />
+                <Label Content="{Binding CurrentColor.Red}" />
+                <Label Content="G: " />
+                <Label Content="{Binding CurrentColor.Green}" />
+                <Label Content="B: " />
+                <Label Content="{Binding CurrentColor.Blue}" />
+            </StackPanel>
+            <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
+                <Expander Width="250" Height="175" Header="Vorschau">
+                    <lc:CartesianChart Width="200" Height="150" Series="{Binding ChartPreview}"/>
+                </Expander>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Margin="0 10 0 0" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsTaskActive}" 
+                             Height="20">
+                <ToolTip.Tip>
+                    Speicherung in der Datenbank erfolgt!
+                </ToolTip.Tip>
+            </ui:ProgressRing>
+            <Button Content="Speichern" Command="{Binding SaveColorCmd}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Speichert die ausgewählte Farbe für die Kategorie!
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+
+    </Grid>
+
+</Window>

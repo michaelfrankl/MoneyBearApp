@@ -1,0 +1,101 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels.Settings.User"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="400" Width="850" Height="400"
+        x:Class="MoneyBear.Views.Settings.User.EditUserView"
+        x:DataType="vm:EditUserViewModel"
+        Title="Benutzer entfernen">
+
+    <Design.DataContext>
+        <vm:EditUserViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Margin="15" Grid.Row="1" Grid.Column="0">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <DataGrid Name="PreviewGrid" Margin="0 10 0 20" ItemsSource="{Binding PreviewUsers}"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                          MaxWidth="450" MaxHeight="250" SelectedItem="{Binding SelectedUser}">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Header="ID" Width="60" Binding="{Binding Id}" />
+                        <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Name}" />
+                        <DataGridTextColumn IsReadOnly="True" Header="E-Mail" Binding="{Binding Email}" />
+                        <DataGridTextColumn IsReadOnly="True" Header="Rolle" Binding="{Binding Role}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </StackPanel>
+
+        <StackPanel Margin="25" Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 7 0 0" Content="Benutzername: "/>
+                <TextBox Text="{Binding UserName}" 
+                         IsEnabled="{Binding IsEditingAllowed}"
+                         Width="200" 
+                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                <Label Margin="0 7 0 0" Content="E-Mail: "/>
+                <TextBox Text="{Binding Email}" Width="250"
+                         IsEnabled="{Binding IsEditingAllowed}"
+                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                <Label Margin="0 7 0 0" Content="Passwort: "/>
+                <TextBox Text="{Binding Password}" Width="231" PasswordChar="{Binding PasswordChars}"
+                        IsEnabled="{Binding IsPasswordFieldAllowed}" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                <Button Command="{Binding PasswordIconCmd}" IsEnabled="{Binding IsPasswordFieldAllowed}">
+                    <Button.Content>
+                        <icon:Icon Value="{Binding PasswordIcon}"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                <Label Margin="0 10 0 0" Content="Berechtigungsrolle: "/>
+                <ComboBox Margin="0 5 0 0" Width="150" Height="25" DisplayMemberBinding="{Binding RoleId}" 
+                          IsEnabled="{Binding IsAllowedToChangedRoles}" ItemsSource="{Binding Roles}" 
+                          SelectedValue="{Binding SelectedRole}" 
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Margin="25" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Margin="0 0 50 0" Content="Benutzer löschen" Command="{Binding DeleteUserCmd}"
+                    IsVisible="{Binding AppService.IsAdmin}">
+                <ToolTip.Tip>
+                    Löscht den aktuell selektierten Nutzer aus der Datenbank!
+                </ToolTip.Tip>
+            </Button>
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsTaskActive}" 
+                             Height="20">
+                <ToolTip.Tip>
+                    Speicherung in der Datenbank erfolgt!
+                </ToolTip.Tip>
+            </ui:ProgressRing>
+            <Button Content="Speichern" Command="{Binding SaveChangesCmd}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                <ToolTip.Tip>
+                    Speichert die geänderten Daten in der Datenbank!
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+    </Grid>
+
+</Window>

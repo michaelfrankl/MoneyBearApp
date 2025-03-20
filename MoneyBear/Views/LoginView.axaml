@@ -1,0 +1,102 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400" MaxWidth="800" MaxHeight="400"
+        x:Class="MoneyBear.Views.LoginView"
+        x:CompileBindings="False"
+        Title="MoneyBear">
+
+    <Design.DataContext>
+        <vm:LoginViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Row="0" Grid.RowSpan="5" Grid.Column="0">
+            <Image Source="avares://MoneyBear/Assets/Icons/AppIcon.png"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="0 -50 0 0">
+            <Label Content="MoneyBear" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+            <Separator Background="Black" Width="350" Height="2"></Separator>
+            <Label HorizontalAlignment="Center" Content="Copyright @ michaelfrankl - 2025 MINT License" FontWeight="Bold"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 -65 0  0">
+            <Border Background="DarkSlateGray"
+                    BorderBrush="Black" BorderThickness="2" CornerRadius="3" Padding="4"
+                    BoxShadow="5 5 10 2 Gray">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Datenbank: " Foreground="White"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="MariaDB (NAS)" Foreground="White"/>
+                    
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Rechnername: " Foreground="White"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding EnvironmentMachineName}" Foreground="White"/>
+                    
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="IPv4-Adresse: " Foreground="White"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding CurrentIPv4Address}" Foreground="White"/>
+                </Grid>
+            </Border>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0 -65 0 0">
+            <Label Content="Anmeldung bei der Datenbank" HorizontalAlignment="Center" FontSize="18"
+                   FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" Margin="5 5 0 0">
+                <Label Margin="0 5 0 0" Content="Benutzername: "/>
+                <ComboBox Width="200" Height="25" ItemsSource="{Binding LoginNamesCBItems}" 
+                          SelectedIndex="{Binding LoginNamesCBIndex}" SelectedValue="{Binding SelectedLoginName}"
+                          IsEnabled="{Binding IsLoginNameActive}" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 5 0 0">
+                <Label Margin="0 7 0 0" Content="Passwort: "/>
+                <TextBox Margin="32 0 0 0" Text="{Binding SelectedLoginPassword}" PasswordChar="{Binding PasswordChar}"
+                         Width="200" 
+                         IsEnabled="{Binding IsLoginPasswordActive}" KeyDown="EnterPasswordEvent"
+                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                <Button Command="{Binding PasswordIconCmd}">
+                    <Button.Content>
+                        <icon:Icon Value="{Binding PasswordIcon}"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            
+            <Button Margin="0 10 0 0" Content="Anmelden" Command="{Binding LoginCmd}" 
+                    IsEnabled="{Binding IsLoginAllowed}" HorizontalAlignment="Center"/>
+            <ProgressBar Margin="0 10 0 0" IsIndeterminate="True" Width="300" Height="4" 
+                         IsVisible="{Binding LoginProgressBarVisible}"/>
+            <TextBlock Margin="0 10 0 0" Text="{Binding LoginErrorMessage}"
+                     Foreground="DarkRed" TextWrapping="Wrap" Width="350" IsVisible="{Binding LoginErrorVisible}"/>
+        </StackPanel>
+        
+    </Grid>
+
+</Window>

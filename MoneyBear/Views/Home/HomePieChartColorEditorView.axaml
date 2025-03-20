@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels.Home"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:lc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="425" Width="350" Height="425"
+        x:Class="MoneyBear.Views.Home.HomePieChartColorEditorView"
+        x:DataType="vm:HomePieChartColorEditorViewModel"
+        Title="{Binding WindowTitle}">
+
+    <Design.DataContext>
+        <vm:HomePieChartColorEditorViewModel />
+    </Design.DataContext>
+
+    <StackPanel Margin="20" Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            <Label Margin="0 12 0 0" Content="Einnahmen: " />
+            <ui:ColorPickerButton Margin="10 0 0 0" Width="100" Height="35" 
+                                  IsEnabled="{Binding !IsTaskActive}"
+                                  Color="{Binding DisplayedIncomeColor}">
+                <ToolTip.Tip>
+                    Farbe wählen durch Palette oder mittel R/G/B, HSV wird nicht unterstützt!
+                </ToolTip.Tip>
+            </ui:ColorPickerButton>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label Margin="0 12 0 0" Content="Ausgaben: " />
+            <ui:ColorPickerButton Margin="16 0 0 0" Width="100" Height="35"
+                                  IsEnabled="{Binding !IsTaskActive}"
+                                  Color="{Binding DisplayedOutgoingColor}">
+                <ToolTip.Tip>
+                    Farbe wählen durch Palette oder mittel R/G/B, HSV wird nicht unterstützt!
+                </ToolTip.Tip>
+            </ui:ColorPickerButton>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <lc:PieChart Width="275" Height="275" Series="{Binding PieSeries}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsTaskActive}"
+                             Height="20">
+                <ToolTip.Tip>
+                    Speicherung in der Datenbank erfolgt!
+                </ToolTip.Tip>
+            </ui:ProgressRing>
+            <Button Content="Speichern" Command="{Binding SaveColorCmd}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Speichert die ausgewählten Farbe für Einnahmen/Ausgaben!
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+
+    </StackPanel>
+
+</Window>

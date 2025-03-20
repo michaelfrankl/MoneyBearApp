@@ -1,0 +1,205 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        mc:Ignorable="d" d:DesignWidth="950" d:DesignHeight="500" Width="950" Height="500"
+        x:Class="MoneyBear.Views.Grid.GridEditLineView"
+        x:DataType="vm:GridEditLineViewModel"
+        Title="{Binding WindowTitle}">
+
+    <Design.DataContext>
+        <vm:GridEditLineViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="15" Grid.Row="0" Grid.Column="0">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <DataGrid Name="PreviewGrid" Margin="0 10 0 20" ItemsSource="{Binding PreviewGridLines}"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                          MaxWidth="400" MaxHeight="375" SelectedItem="{Binding SelectedGridLine}">
+                    
+                    <DataGrid.Styles>
+                        <Style Selector="DataGrid /template/ ScrollBar#PART_HorizontalScrollbar">
+                            <Setter Property="AllowAutoHide" Value="False"/>
+                        </Style>
+                        <Style Selector="DataGrid /template/ ScrollBar#PART_VerticalScrollbar">
+                            <Setter Property="AllowAutoHide" Value="True"/>
+                        </Style>					
+                        <Style Selector="DataGrid /template/ DataGridRowsPresenter#PART_RowsPresenter">
+                            <Setter Property="Grid.RowSpan" Value="1" />
+                            <Setter Property="Grid.ColumnSpan" Value="3" />
+                        </Style>
+                    </DataGrid.Styles>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Header="ID" Width="60" Binding="{Binding Id}" />
+                        <DataGridTextColumn IsReadOnly="True" Header="Zeilenname" Binding="{Binding Name}" />
+                        <DataGridTemplateColumn Header="Zeilenwert">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding JanuarValue, StringFormat={}{0:C2}}"
+                                               HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--<DataGridTextColumn IsReadOnly="True" Header="Zeilenwert" Binding="{Binding JanuarValue}"/>-->
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </StackPanel>
+        
+        <StackPanel Margin="35" Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 8 0 0" Content="Zeilenname: "/>
+                <TextBox Width="200" Height="25" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                         IsEnabled="{Binding EditingAllowed}" Text="{Binding EditGridLineName}"/>
+            </StackPanel>
+            <!--<StackPanel Orientation="Horizontal">
+                <Label Margin="0 8 0 0" Content="Zeilenwert: "/>
+                <TextBox Margin="8 0 0 0" Width="200" Height="25" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                         IsEnabled="{Binding EditingAllowed}" Text="{Binding EditGridLineValue}" 
+                         TextChanged="TextBox_OnTextChanged"/>
+            </StackPanel>-->
+            <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                <Label Margin="0 12 0 0" Content="Zeilennummer: "/>
+                <Label Margin="5 12 0 0" Content="{Binding EditGridLineNumber}"/>
+                <Button Margin="5 7 0 0" Click="Button_OnArrowUpClicked" Name="LineArrowUp">
+                    <icon:Icon Value="fa-solid fa-arrow-down"></icon:Icon>
+                </Button>
+                <Button Margin="5 7 0 0" Click="Button_OnArrowDownClicked" Name="LineArrowDown">
+                    <icon:Icon Value="fa-solid fa-arrow-up"></icon:Icon>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 12 0 0" Content="Kategorie: "/>
+                <ComboBox Margin="15 5 0 0" Width="150" Height="25"
+                          ItemsSource="{Binding LineCategories}"
+                          SelectedValue="{Binding EditGridLineCategory}"
+                          DisplayMemberBinding="{Binding Id}"
+                          HorizontalContentAlignment="Left" 
+                          VerticalContentAlignment="Center" IsEnabled="{Binding !IsSpecialLineSelected}"/>
+                <Button Margin="5 5 0 0" Command="{Binding OpenAddCategoryWindowCmd}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        IsEnabled="{Binding !IsSpecialLineSelected}">
+                    <Button.Content>
+                        <icon:Icon Value="fa-solid fa-plus"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 12 0 0" Content="Zeilenkategorie: "/>
+                <ComboBox Margin="15 5 0 0" Width="150" Height="25"
+                          ItemsSource="{Binding LineTypes}"
+                          DisplayMemberBinding="{Binding Typ}"
+                          SelectedValue="{Binding EditGridLineType}"
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                          IsEnabled="{Binding EditingAllowed}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" IsVisible="{Binding IsSumLineSelected}">
+                <Label Margin="0 12 0 0" Content="Summenbildung: ">
+                    <ToolTip.Tip>
+                        Die Summe setzt sich aus der Rechnung der jeweiligen Zeilen-IDs zusammen. 
+                        z.B. Zeile "Gehalt" mit ID = 1 + Zeile "Sonstige Einnahmen" mit ID = 2. Also wäre die Rechnung 1+2 
+                    </ToolTip.Tip>
+                </Label>
+                <TextBox Margin="0 5 0 0" Text="{Binding EditGridLineSum}" 
+                         Width="150" Height="10" 
+                         IsEnabled="False"
+                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                <Button Margin="5 5 0 0" 
+                        Command="{Binding OpenSumEditWindowCmd}" 
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        IsEnabled="{Binding EditingAllowed}">
+                    <Button.Content>
+                        <icon:Icon Value="fa-solid fa-calculator"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" IsVisible="{Binding IsDebitLineSelected}">
+                <Label Margin="0 12 0 0" Content="Summe">
+                    <ToolTip.Tip>
+                        Die Summe setzt sich aus der Rechnung der jeweiligen Zeilen-IDs zusammen. 
+                        z.B. Zeile "Gehalt" mit ID = 1 + Zeile "Sonstige Einnahmen" mit ID = 2. Also wäre die Rechnung 1+2 
+                    </ToolTip.Tip>
+                </Label>
+                <CheckBox Margin="5 5 0 0" IsChecked="{Binding IsDebitSumLineSelected}"
+                          IsEnabled="{Binding IsSpecialLineSelected}"/>
+                <StackPanel Orientation="Horizontal" IsVisible="{Binding IsDebitSumLineSelected}">
+                    <TextBox Margin="0 5 0 0" Text="{Binding EditGridLineSum}" 
+                             Width="150" Height="10" 
+                             IsEnabled="False"
+                             HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    <Button Margin="5 5 0 0" 
+                            Command="{Binding OpenSumEditWindowCmd}" 
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                            IsEnabled="{Binding EditingAllowed}">
+                        <Button.Content>
+                            <icon:Icon Value="fa-solid fa-calculator"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 12 0 0" Content="Zeile gülitg ab: ">
+                    <ToolTip.Tip>
+                        Der Tag ist hier für die Filterung wichtig und sollte dahingegen abgestimmt sein.
+                    </ToolTip.Tip>
+                </Label>
+                <CalendarDatePicker Margin="0 5 0 0" IsEnabled="{Binding EditingAllowed}"
+                                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                    DisplayDateStart="{Binding DisplayDateStart}"
+                                    DisplayDateEnd="{Binding DisplayDateEnd}"
+                                    DisplayDate="{Binding DateToDisplay}"
+                                    SelectedDate="{Binding EditGridLineValidFrom}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 12 0 0" Content="Zeile gülitg bis: "/>
+                <CalendarDatePicker Margin="0 5 0 0" IsEnabled="{Binding EditingAllowed}"
+                                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                    DisplayDateStart="{Binding DisplayDateStart}"
+                                    DisplayDateEnd="{Binding DisplayDateEnd}"
+                                    DisplayDate="{Binding DateToDisplay}"
+                                    SelectedDate="{Binding EditGridLineValidTo}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 12 0 0" Content="Abbuchungsfrequenz: ">
+                    <ToolTip.Tip>
+                        Bestimmt die Frequenz, wann ein Wert beim Import übernommen wird! z.B. Ausgaben mit "Jeden 2. Monat" werden auch nur alle zwei Monate berechnet!
+                    </ToolTip.Tip>
+                </Label>
+                <ComboBox Margin="15 5 0 0" Width="150" Height="25" 
+                          IsEnabled="{Binding !IsSpecialLineSelected}"
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                          ItemsSource="{Binding LineFrequencies}"
+                          DisplayMemberBinding="{Binding Id}"
+                          SelectedValue="{Binding EditGridLineFrequency}"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Margin="0 175 100 0" Grid.Row="2" Grid.Column="1" Orientation="Horizontal"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsProgressBarActive}" 
+                             Height="20"/>
+            <Button Margin="0 0 0 0" Content="Bestätigen" Command="{Binding EditGridLineCmd}"
+                    IsEnabled="{Binding !IsProgressBarActive}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                <ToolTip.Tip>
+                    Aktualisiert die selektierte Grid-Zeile mit den neuen Werten!
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

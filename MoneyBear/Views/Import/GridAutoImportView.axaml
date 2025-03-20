@@ -1,0 +1,57 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels.Import"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="200" Width="650" Height="200"
+        x:Class="MoneyBear.Views.Import.GridAutoImportView"
+        x:DataType="vm:GridAutoImportViewModel"
+        Title="Automatischer Import">
+    
+    <Design.DataContext>
+        <vm:GridAutoImportViewModel/>
+    </Design.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Margin="25" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Content="Automatischer Import" FontSize="18" FontWeight="Bold"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+            <Separator Height="4"></Separator>
+            <TextBlock Width="500" Text="Für diesen Monat wurde noch kein automatischer Import durchgeführt, möchten Sie diesen jetzt starten?"
+                       TextWrapping="Wrap" FontWeight="Bold"/>
+            <Separator Height="4"></Separator>
+        </StackPanel>
+        <StackPanel Margin="15" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Später manuell starten" Background="Gray" Command="{Binding CancelImportCmd}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Import kann nachträglich in den Einstellungen durchgeführt werden!
+                </ToolTip.Tip>
+            </Button>
+            <ui:ProgressRing Margin="50 0 0 0" IsIndeterminate="True" IsVisible="{Binding IsTaskActive}" 
+                             Height="20">
+                <ToolTip.Tip>
+                    Speicherung in der Datenbank erfolgt!
+                </ToolTip.Tip>
+            </ui:ProgressRing>
+            <Button Margin="55 0 0 0 " Content="Import starten" Background="ForestGreen" 
+                    Command="{Binding ImportDataCmd}"
+                    IsEnabled="{Binding !IsTaskActive}">
+                <ToolTip.Tip>
+                    Import für den aktuellen Monat durchführen!
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+        
+    </Grid>
+</Window>

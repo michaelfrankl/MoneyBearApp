@@ -1,0 +1,134 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400" Width="500" Height="400" MaxWidth="500"
+        x:Class="MoneyBear.Views.DebtEditView"
+        x:DataType="vm:DebtEditViewModel"
+        Title="{Binding WindowTitle}">
+
+    <Design.DataContext>
+        <vm:DebtEditViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10 10 0 0" Orientation="Vertical" Width="650" MaxWidth="450" HorizontalAlignment="Left">
+            <HeaderedContentControl Header="Eintrag bearbeiten">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Name des Gläubigers: " />
+                        <ComboBox Margin="10 -4 0 0" Height="25" Width="150"
+                                  IsEnabled="{Binding EditingAllowed}"
+                                  ItemsSource="{Binding DebtUserList}"
+                                  DisplayMemberBinding="{Binding Name}"
+                                  SelectedValue="{Binding SelectedDebtUser}"
+                                  SelectedIndex="{Binding SelectedDebtUserIndex}"
+                                  HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                        <Label Margin="0 5 0 0" Content="Datum der Gutschrift: " />
+                        <CalendarDatePicker Margin="5 0 0 0" IsEnabled="{Binding EditingAllowed}"
+                                            DisplayDateStart="{Binding DisplayDateStart}"
+                                            DisplayDateEnd="{Binding DisplayDateEnd}"
+                                            SelectedDate="{Binding SelectedDebtDate}"
+                                            HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                        <Label Margin="0 5 0 0" Content="Summe der Gutschrift: " />
+                        <TextBox Width="200" Text="{Binding DebtSum}"
+                                 HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                 IsEnabled="{Binding EditingAllowed}"
+                                 TextChanged="TextBox_OnTextChanged"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                        <Label Margin="0 5 0 0" Content="Art der Transaktion:" />
+                        <ComboBox Margin="10 2 0 0" Height="25" Width="150"
+                                  IsEnabled="{Binding EditingAllowed}"
+                                  ItemsSource="{Binding DebtTypes}"
+                                  DisplayMemberBinding="{Binding Id}"
+                                  SelectedValue="{Binding SelectedDebtType}"
+                                  SelectedIndex="{Binding SelectedDebtTypeIndex}"
+                                  HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                        <Label Margin="0 5 0 0" Content="Offene Summe:" />
+                        <CheckBox Margin="5 -2 0 0" IsChecked="{Binding IsDebtOpen}"
+                                  IsEnabled="{Binding EditingAllowed}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal" IsVisible="{Binding !IsDebtOpen}">
+                        <Label Margin="0 5 0 0" Content="Summe bezahlt am:" />
+                        <CalendarDatePicker Margin="5 0 0 0"
+                                            IsEnabled="{Binding EditingAllowed}"
+                                            DisplayDateStart="{Binding DisplayDateStart}"
+                                            DisplayDateEnd="{Binding DisplayDateEnd}"
+                                            HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                            SelectedDate="{Binding SelectedDebtPaidDate}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                        <Expander Header="Notiz" Width="400">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Width="350" Height="150"
+                                             IsEnabled="{Binding EditingAllowed}"
+                                             AcceptsReturn="True" TextWrapping="Wrap"
+                                             HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
+                                             Text="{Binding SelectedDebtNote}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Margin="5 0 0 0" Background="Red"
+                                            IsEnabled="{Binding EditingAllowed}"
+                                            Command="{Binding DeleteCommentCmd}">
+                                        <Button.Content>
+                                            <icon:Icon Value="fa-solid fa-trash" />
+                                        </Button.Content>
+                                        <ToolTip.Tip>
+                                            Löscht das aktuelle Kommentar!
+                                        </ToolTip.Tip>
+                                    </Button>
+                                    <Label Margin="235 0 0 0" Content="{Binding SelectedDebtNoteCount}"/>
+                                    <Label Content="/"/>
+                                    <Label Content="1024"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Margin="0 2 0 0" Content="Maximale Zeichen überschritten!" 
+                                           Foreground="Red" IsVisible="{Binding IsOverMaxNoteCount}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                    <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                        <Expander Header="Anhang" Width="400">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Hochladen" Command="{Binding UploadDebtImage}"
+                                            IsEnabled="{Binding EditingAllowed}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    <Button Margin="5 0 0 0" Content="Löschen" IsEnabled="{Binding EditingAllowed}"
+                                            Command="{Binding DeleteDebtImage}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                                    <Image Source="{Binding SelectedDebtImage}"
+                                           Width="350" Height="150"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                    <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                        <Button Content="Speichern" IsEnabled="{Binding EditingAllowed}"
+                                Command="{Binding SaveChangesCmd}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        <Button Margin="15 0 0 0" Content="Abbrechen"
+                                IsEnabled="{Binding EditingAllowed}"
+                                Command="{Binding CancelChangesCmd}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    </StackPanel>
+                </StackPanel>
+            </HeaderedContentControl>
+
+        </StackPanel>
+    </ScrollViewer>
+
+
+</Window>

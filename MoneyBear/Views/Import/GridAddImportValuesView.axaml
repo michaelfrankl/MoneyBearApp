@@ -1,0 +1,98 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels.Import"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:converter="clr-namespace:MoneyBear.Converter"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" Width="800" Height="450"
+        x:Class="MoneyBear.Views.Import.GridAddImportValuesView"
+        x:DataType="vm:GridAddImportValuesViewModel"
+        Title="Werteeingabe für den automatischen Import">
+
+    <Design.DataContext>
+        <vm:GridAddImportValuesViewModel />
+    </Design.DataContext>
+    
+    <Window.Resources>
+        <converter:DecimalConverter x:Key="DecimalConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="15" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Margin="10 0 0 0">
+                <Label.Content>
+                    <icon:Icon Value="fa-solid fa-circle-info" />
+                </Label.Content>
+                <ToolTip.Tip>
+                    Werte im Grid werden automatisch gespeichert!
+                </ToolTip.Tip>
+            </Label>
+            <Label Content="Werte für den automatischen Import" FontSize="18" FontWeight="Bold" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBox Width="350" Text="{Binding SearchText}" Watermark="Suchen..." HorizontalContentAlignment="Left"
+                     VerticalContentAlignment="Center">
+            </TextBox>
+            <ComboBox Margin="5 2 0 0" Width="150" Height="25" ItemsSource="{Binding Categories}"
+                      SelectedValue="{Binding SelectedLineCategory}" DisplayMemberBinding="{Binding Id}"/>
+            <ComboBox Margin="5 2 0 0" Width="150" Height="25" ItemsSource="{Binding Frequencies}"
+                      SelectedValue="{Binding SelectedLineFrequency}" DisplayMemberBinding="{Binding Id}"/>
+        </StackPanel>
+        
+        <StackPanel Margin="10" Grid.Row="2">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <DataGrid MinHeight="300" MinWidth="750" Height="300" Width="750" MaxHeight="700" MaxWidth="1000" ItemsSource="{Binding PreviewLines}"
+                          CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                          BeginningEdit="OnBeginningEdit" CellEditEnding="OnCellEditEnding"
+                          PreparingCellForEdit="OnPreparingCellForEdit" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    
+                    <DataGrid.Styles>
+                        <Style Selector="DataGrid /template/ ScrollBar#PART_HorizontalScrollbar">
+                            <Setter Property="AllowAutoHide" Value="False"/>
+                        </Style>
+                        <Style Selector="DataGrid /template/ ScrollBar#PART_VerticalScrollbar">
+                            <Setter Property="AllowAutoHide" Value="True"/>
+                        </Style>					
+                        <Style Selector="DataGrid /template/ DataGridRowsPresenter#PART_RowsPresenter">
+                            <Setter Property="Grid.RowSpan" Value="1" />
+                            <Setter Property="Grid.ColumnSpan" Value="3" />
+                        </Style>
+                    </DataGrid.Styles>
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Header="Zeilenname" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Zeilenwert" Binding="{Binding JanuarValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Zeilenkategorie" Binding="{Binding LineCategoryId}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Abbuchungsfrequenz" Binding="{Binding FrequencyId}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsTaskActive}" 
+                             Height="20">
+                <ToolTip.Tip>
+                    Speicherung in der Datenbank erfolgt!
+                </ToolTip.Tip>
+            </ui:ProgressRing>
+            <Button Name="CloseBtn" Margin="0 0 15 0" Content="Schließen" 
+                    Command="{Binding CloseViewCmd}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    IsEnabled="{Binding !IsTaskActive}"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

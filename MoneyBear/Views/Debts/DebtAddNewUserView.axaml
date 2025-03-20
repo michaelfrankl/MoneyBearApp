@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="475" d:DesignHeight="150" Width="475" Height="150" MaxWidth="475" MaxHeight="150"
+        x:Class="MoneyBear.Views.Debts.DebtAddNewUserView"
+        x:DataType="vm:DebtAddNewUserViewModel"
+        Title="{Binding WindowTitle}">
+    <Design.DataContext>
+        <vm:DebtAddNewUserViewModel/>
+    </Design.DataContext>
+    
+    <StackPanel Orientation="Vertical" Margin="10" Width="650" MaxWidth="450" HorizontalAlignment="Left">
+        <HeaderedContentControl Header="Neuen Gläubiger hinzufügen">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Label Margin="0 2 0 0" Content="Vorname:"/>
+                    <TextBox Margin="15 -5 0 0" Width="200" IsEnabled="{Binding EditingAllowed}"
+                             Text="{Binding NewUserFirstName}"
+                             HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Watermark="Max"/>
+                </StackPanel>
+                <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                    <Label Margin="0 2 0 0" Content="Nachname:"/>
+                    <TextBox Margin="5 -5 0 0" Width="200" IsEnabled="{Binding EditingAllowed}" 
+                             Text="{Binding NewUserLastName}"
+                             HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Watermark="Mustermann"/>
+                </StackPanel>
+                <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                    <Button Content="Speichern" IsEnabled="{Binding EditingAllowed}" 
+                            Command="{Binding SaveChangesCmd}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                    <Button Margin="10 0 0 0" Content="Abbrechen" IsEnabled="{Binding EditingAllowed}"
+                            Command="{Binding CancelChangesCmd}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+                </StackPanel>
+            </StackPanel>
+        </HeaderedContentControl>
+    </StackPanel>
+</Window>

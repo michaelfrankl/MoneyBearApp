@@ -1,0 +1,134 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" Width="800" Height="450"
+        x:Class="MoneyBear.Views.Grid.GridAddSumView"
+        x:DataType="vm:GridAddSumViewModel"
+        Title="{Binding WindowTitle}">
+
+    <Design.DataContext>
+        <vm:GridAddSumViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Margin="15 0 0 0" Orientation="Horizontal" Grid.Row="1">
+            <Label Margin="0 7 0 0" Content="Zeilenname: "/>
+            <TextBox Text="{Binding CurrentGridLine.Name}" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" IsEnabled="False"
+                     Width="250"/>
+        </StackPanel>
+        <StackPanel Margin="15 5 0 0" Orientation="Horizontal" Grid.Row="2">
+            <Label Margin="0 7 0 0" Content="Zeilenwert: "/>
+            <TextBox Margin="10 0 0 0" Text="{Binding CurrentGridLine.JanuarValue}" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" IsEnabled="False"
+                     Width="150"/>
+        </StackPanel>
+        <Separator Grid.Row="3" Margin="5 5 0 0" Width="700" Height="2"></Separator>
+        
+        <StackPanel Margin="15 15 0 0" Orientation="Horizontal" Grid.Row="4">
+            <Label Margin="0 7 0 0" Content="Summe: ">
+                <ToolTip.Tip>
+                    Die Summe bildet sich aus den Steuerelementen!
+                </ToolTip.Tip>
+            </Label>
+            <TextBox Text="{Binding NewGridLineSumCalculation}" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" IsEnabled="False"
+                     Width="250" TextChanged="TextBox_OnSumCalculationTextChanged"/>
+        </StackPanel>
+        
+        <StackPanel Margin="15 15 0 0" Orientation="Horizontal" Grid.Row="5">
+            <TextBox Text="{Binding SearchText}" Watermark="Suchen..." HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="250"/>
+            <ComboBox Margin="5 5 0 0" Width="150" Height="25" ItemsSource="{Binding Categories}" 
+                      SelectedValue="{Binding SelectedGridLineCategory}" 
+                      SelectedIndex="{Binding SelectedGridLineCategoryIndex}"
+                      DisplayMemberBinding="{Binding Id}">
+            </ComboBox>
+            <ComboBox Margin="5 5 0 0" Width="150" Height="25"
+                      ItemsSource="{Binding BuchungsFilterGridItemsCB}"
+                      SelectedValue="{Binding SelectedBuchungsFilterItem}"
+                      SelectedIndex="{Binding SelectedBuchungsFilterItemIndex}"/>
+        </StackPanel>
+        
+        <StackPanel Margin="15 15 0 0" Orientation="Horizontal" Grid.Row="6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ListBox Name="ListBox" ItemsSource="{Binding PreviewGridData}" Grid.Column="0" Height="200" Width="300"
+                             SelectedValue="{Binding SelectedGridLine}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Margin="5 0 0 0" Text="{Binding Id}"/>
+                                    <TextBlock Text=" | "/>
+                                    <TextBlock Margin="5 0 0 0 " Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+                
+                <StackPanel Grid.Column="1" Margin="50 0 0 0" Orientation="Vertical">
+                    <Button Name="AddLineBtn" Margin="0" Height="35" Width="50" Click="AddLineBtn_OnClick">
+                        <Button.Content>
+                            <icon:Icon Value="fa-solid fa-file-circle-plus"></icon:Icon>
+                        </Button.Content>
+                        <ToolTip.Tip>
+                            Fügt die ausgewähle Zeile der Summenrechnung hinzu!
+                        </ToolTip.Tip>
+                    </Button>
+                    <Button Name="AddPlusBtn" Margin="0 5 0 0" Height="35" Width="50" Click="AddPlusBtn_OnClick">
+                        <Button.Content>
+                            <icon:Icon Value="fa-solid fa-plus"></icon:Icon>
+                        </Button.Content>
+                        <ToolTip.Tip>
+                            + Operator
+                        </ToolTip.Tip>
+                    </Button>
+                    <Button Name="AddMinusBtn" Margin="0 5 0 0" Height="35" Width="50" Click="AddMinusBtn_OnClick">
+                        <Button.Content>
+                            <icon:Icon Value="fa-solid fa-minus"></icon:Icon>
+                        </Button.Content>
+                        <ToolTip.Tip>
+                            - Operator
+                        </ToolTip.Tip>
+                    </Button>
+                    <Button Name="DeleteLineBtn" Margin="0 5 0 0" Height="35" Width="50" Click="DeleteLineBtn_OnClick">
+                        <Button.Content>
+                            <icon:Icon Value="fa-solid fa-trash"></icon:Icon>
+                        </Button.Content>
+                        <ToolTip.Tip>
+                            Entfernt die letzte Zeile bzw. den letzten Operanten!
+                        </ToolTip.Tip>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="7">
+            <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsTaskActive}" 
+                             Height="20"/>
+            <Button Name="ConfirmBtn" Margin="0 0 25 0" 
+                    Content="Hinzufügen" Width="100" Height="35" 
+                    Command="{Binding ReturnSumLineCmd}" IsEnabled="{Binding !IsTaskActive}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+            </Button>
+        </StackPanel>
+    </Grid>
+
+</Window>

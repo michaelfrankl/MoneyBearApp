@@ -1,0 +1,106 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:MoneyBear.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:converter="clr-namespace:MoneyBear.Converter"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:HomeViewModel"
+        x:Class="MoneyBear.Views.HomeView">
+    
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:HomeViewModel/>
+    </Design.DataContext>
+    
+    <UserControl.Resources>
+        <converter:DecimalConverter x:Key="DecimalConverter"/>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Menu>
+                <MenuItem Header="Start"></MenuItem>
+                <MenuItem Header="Darstellung">
+                    <MenuItem Header="Aktualisieren" Command="{Binding RefreshDataCmd}"/>
+                    <MenuItem Header="Farben anpassen">
+                        <MenuItem Header="Einnahmen/Ausgaben anpassen" Command="{Binding LoadPieChartColorEditorCmd}"/>
+                        <MenuItem Header="Ausgaben anpassen" Command="{Binding LoadColorEditorCmd}"/>
+                    </MenuItem>
+                    <MenuItem Header="Legende anpassen">
+                        <MenuItem Header="Legende anzeigen" 
+                                     Command="{Binding CartesianChartLegendCmd}"/>
+                    </MenuItem>
+                    <MenuItem Header="Zeilenvorschau anpassen" Command="{Binding LoadGridLinePreviewEditorCmd}"/>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <lc:PieChart Width="275" Height="275" Series="{Binding PieSeries}"/>
+        </StackPanel>
+        <StackPanel Margin="50 0 0 0" Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <DataGrid MinHeight="250" MinWidth="350" Height="300" Width="750" MaxHeight="200" MaxWidth="400" 
+                          ItemsSource="{Binding GridPreviewData}"
+                          CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    
+                    <DataGrid.Styles>
+                        <Style Selector="DataGrid /template/ ScrollBar#PART_HorizontalScrollbar">
+                            <Setter Property="AllowAutoHide" Value="False"/>
+                        </Style>
+                        <Style Selector="DataGrid /template/ ScrollBar#PART_VerticalScrollbar">
+                            <Setter Property="AllowAutoHide" Value="True"/>
+                        </Style>					
+                        <Style Selector="DataGrid /template/ DataGridRowsPresenter#PART_RowsPresenter">
+                            <Setter Property="Grid.RowSpan" Value="1" />
+                            <Setter Property="Grid.ColumnSpan" Value="3" />
+                        </Style>
+                    </DataGrid.Styles>
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Header="Zeilenname" Binding="{Binding Name}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsJanuarValueDisplayed}" IsReadOnly="True" Header="Januar" Binding="{Binding JanuarValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsFebruarValueDisplayed}" IsReadOnly="True" Header="Februar" Binding="{Binding FebruarValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsMärzValueDisplayed}" IsReadOnly="True" Header="März" Binding="{Binding MärzValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsAprilValueDisplayed}" IsReadOnly="True" Header="April" Binding="{Binding AprilValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsMaiValueDisplayed}" IsReadOnly="True" Header="Mai" Binding="{Binding MaiValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsJuniValueDisplayed}" IsReadOnly="True" Header="Juni" Binding="{Binding JuniValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsJuliValueDisplayed}" IsReadOnly="True" Header="Juli" Binding="{Binding JuliValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsAugustValueDisplayed}" IsReadOnly="True" Header="August" Binding="{Binding AugustValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsSeptemberValueDisplayed}" IsReadOnly="True" Header="September" Binding="{Binding SeptemberValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsOktoberValueDisplayed}" IsReadOnly="True" Header="Oktober" Binding="{Binding OktoberValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsNovemberValueDisplayed}" IsReadOnly="True" Header="November" Binding="{Binding NovemberValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsVisible="{Binding IsDezemberValueDisplayed}" IsReadOnly="True" Header="Dezember" Binding="{Binding DezemberValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+            <lc:CartesianChart MinWidth="500" MinHeight="300" Height="300" Width="800"
+                               XAxes="{Binding CategoryXAxes}"
+                               YAxes="{Binding CategoryYAxes}"
+                               Series="{Binding CategoryChart}"
+                               LegendPosition="{Binding CartesianChartPosition}">
+            </lc:CartesianChart>
+        </StackPanel>
+    </Grid>
+</UserControl>

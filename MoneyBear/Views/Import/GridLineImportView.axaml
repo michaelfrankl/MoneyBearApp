@@ -1,0 +1,69 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:MoneyBear.ViewModels.Import"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250" Width="400" Height="250"
+        x:Class="MoneyBear.Views.Import.GridLineImportView"
+        x:DataType="vm:GridLineImportViewModel"
+        Title="{Binding WindowTitle}">
+    
+    <Design.DataContext>
+        <vm:GridLineImportViewModel/>
+    </Design.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label Content="Grid-Zeilen Werte importieren!" FontSize="18" FontStyle="Normal" FontWeight="Bold"/>
+            <Separator Background="Black"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <Label Content="Datum auswählen:"></Label>
+                <CalendarDatePicker Margin="5 -5 0 0" DisplayDateStart="{Binding DisplayDateStart}"
+                                    DisplayDateEnd="{Binding DisplayDateEnd}" 
+                                    SelectedDate="{Binding SelectedDate}"
+                                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+                    <ToolTip.Tip>
+                        Es spielt nur der Monat und das Jahr eine Rolle!
+                    </ToolTip.Tip>
+                </CalendarDatePicker>
+            </StackPanel>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+            <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsProgressBarActive}" 
+                         Height="10"/>
+            <Label Margin="0 10 0 0 " Content="{Binding ImportMessage}"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <Button Margin="25 0 0 0" Content="Import"
+                    Command="{Binding ImportCmd}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    IsEnabled="{Binding !IsProgressBarActive}"
+                    Foreground="White" Background="DarkGreen">
+                <ToolTip.Tip>
+                    Es werden die gesetzten Default-Werte gesetzt -> Einstellungen -> Import -> Default Werte
+                </ToolTip.Tip>
+            </Button>
+        </StackPanel>
+        
+    </Grid>
+</Window>

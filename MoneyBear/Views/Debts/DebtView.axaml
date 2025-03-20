@@ -1,0 +1,141 @@
+<UserControl x:Name="RootControl" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:MoneyBear.ViewModels"
+        xmlns:icon="https://github.com/projektanker/icons.avalonia"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:MoneyBear.Converter"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MoneyBear.Views.DebtView"
+        x:CompileBindings="False"
+        x:DataType="vm:DebtViewModel">
+    
+    <Design.DataContext>
+        <vm:DebtViewModel/>
+    </Design.DataContext>
+    <UserControl.Resources>
+        <converter:DecimalConverter x:Key="decimalConverter"/>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.ColumnSpan="1">
+            <Menu>
+                <MenuItem Header="Bearbeiten">
+                    <MenuItem Header="Neuen Eintrag erstellen" Command="{Binding AddNewEntryCmd}"/>
+                    <MenuItem Header="Gläubiger hinzufügen" Command="{Binding AddNewUserCmd}"/>
+                    <MenuItem Header="Gläubiger bearbeiten"/>
+                </MenuItem>
+                <MenuItem Header="Export">
+                    <MenuItem Header="PDF Export"/>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+        
+        <StackPanel Margin="10 0 0 0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1">
+            <StackPanel Orientation="Horizontal">
+                <TextBox Width="350" Watermark="Suchfeld..." HorizontalAlignment="Left"
+                         Text="{Binding SearchDebtGridFilter}" HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center" />
+                <ComboBox Margin="5 5 0 0" Height="25" Width="150" 
+                          DisplayMemberBinding="{Binding Name}"
+                          ItemsSource="{Binding DebtUserList}"
+                          SelectedValue="{Binding SelectedDebtUser}"
+                          SelectedIndex="{Binding SelectedDebtUserIndex}"
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+                <ComboBox Margin="5 5 0 0" Height="25" Width="150" 
+                          DisplayMemberBinding="{Binding Id}"
+                          ItemsSource="{Binding DebtTypes}"
+                          SelectedValue="{Binding SelectedDebtType}"
+                          SelectedIndex="{Binding SelectedDebtTypeIndex}"
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+                <CheckBox Margin="5 0 0 0" Content="Bezahlt"
+                          IsChecked="{Binding IsDebtPaid}"/>
+            </StackPanel>
+            
+
+            <ScrollViewer Margin="0 10 0 0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <DataGrid x:Name="GridData" x:FieldModifier="public" ItemsSource="{Binding DebtGridData}"
+                          MaxWidth="650" MaxHeight="300"
+                          CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                          AutoGenerateColumns="False" CellEditEnding="GridData_OnCellEditEnding"
+                          PreparingCellForEdit="GridData_OnPreparingCellForEdit">
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Header="Gläubiger" Binding="{Binding DebtName}"/>
+                        <DataGridTextColumn Header="Summe" Binding="{Binding DebtSum,
+                            StringFormat={}{0:C2}, Converter={StaticResource decimalConverter},
+                            Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Art" Binding="{Binding DebtType}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Datum" Binding="{Binding DebtDate}"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="EditGridBtn"
+                                            Command="{Binding DataContext.EditDebtCmd, ElementName=GridData}"
+                                            CommandParameter="{Binding}">
+                                        <Button.Content>
+                                            <icon:Icon Value="fa-solid fa.user-pen"/>
+                                        </Button.Content>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="EditGridBtn"
+                                            Command="{Binding DataContext.NoteDebtCmd, ElementName=GridData}"
+                                            CommandParameter="{Binding}">
+                                        <Button.Content>
+                                            <icon:Icon Value="fa-solid fa-note-sticky"/>
+                                        </Button.Content>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="EditGridBtn"
+                                            Command="{Binding DataContext.ImageDebtCmd, ElementName=GridData}"
+                                            CommandParameter="{Binding}"
+                                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                        <Button.Content>
+                                            <icon:Icon Value="fa-solid fa-image"/>
+                                        </Button.Content>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                    
+                    <DataGrid.Styles>
+                        <Style Selector="DataGrid /template/ ScrollBar#PART_HorizontalScrollbar">
+                            <Setter Property="AllowAutoHide" Value="False" />
+                        </Style>
+                        <Style Selector="DataGrid /template/ ScrollBar#PART_VerticalScrollbar">
+                            <Setter Property="AllowAutoHide" Value="True" />
+                        </Style>
+                        <Style Selector="DataGrid /template/ DataGridRowsPresenter#PART_RowsPresenter">
+                            <Setter Property="Grid.RowSpan" Value="1" />
+                            <Setter Property="Grid.ColumnSpan" Value="3" />
+                        </Style>
+                    </DataGrid.Styles>
+                    
+                </DataGrid>
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
+</UserControl>

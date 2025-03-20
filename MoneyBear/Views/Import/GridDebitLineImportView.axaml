@@ -1,0 +1,134 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MoneyBear.ViewModels"
+        xmlns:converter="clr-namespace:MoneyBear.Converter"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        mc:Ignorable="d" d:DesignWidth="750" d:DesignHeight="375" Width="750" Height="375"
+        x:Class="MoneyBear.Views.Import.GridDebitLineImportView"
+        x:DataType="vm:GridDebitLineImportViewModel"
+        Title="Kontozeilen bearbeiten">
+
+    <Design.DataContext>
+        <vm:GridDebitLineImportViewModel />
+    </Design.DataContext>
+    
+    <Window.Resources>
+        <converter:DecimalConverter x:Key="DecimalConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="15" Grid.Row="1" Grid.Column="0">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <DataGrid Name="PreviewGrid" Margin="0 10 0 20" ItemsSource="{Binding PreviewDebitLines}"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                          MaxWidth="450" MaxHeight="250" SelectedItem="{Binding SelectedGridLine}">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Name}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </StackPanel>
+        
+        <StackPanel Margin="30" Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label Margin="0 7 0 0" Content="Zeilenname: "/>
+                <TextBox Width="250" IsEnabled="False" 
+                         Text="{Binding DebitLineName}"
+                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                <Label Margin="0 7 0 0" Content="Zeile gültig von: "/>
+                <CalendarDatePicker Margin="0 5 0 0" IsEnabled="False"
+                                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                    DisplayDateStart="{Binding DisplayDateStart}"
+                                    DisplayDateEnd="{Binding DisplayDateEnd}"
+                                    DisplayDate="{Binding DateToDisplay}"
+                                    SelectedDate="{Binding DebitGridLineValidFrom}"/>
+            </StackPanel>
+            <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
+                <Label Margin="0 7 0 0" Content="Zeile gültig bis: "/>
+                <CalendarDatePicker Margin="0 5 0 0" IsEnabled="False"
+                                    HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                    DisplayDateStart="{Binding DisplayDateStart}"
+                                    DisplayDateEnd="{Binding DisplayDateEnd}"
+                                    DisplayDate="{Binding DateToDisplay}"
+                                    SelectedDate="{Binding DebitGridLineValidTo}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <ScrollViewer IsScrollChainingEnabled="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <DataGrid Name="PreviewDebitValueGrid" Margin="0 10 0 20"
+                          ItemsSource="{Binding PreviewEditLines}"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                          MaxWidth="375" MaxHeight="250" SelectedItem="{Binding SelectedGridLine}"
+                          HorizontalScrollBarVisibility="Auto"
+                          BeginningEdit="OnBeginningEdit"
+                          CellEditEnding="OnCellEditEnding"
+                          VerticalScrollBarVisibility="Auto">
+                        
+                        <DataGrid.Styles>
+                            <Style Selector="DataGrid /template/ ScrollBar#PART_HorizontalScrollbar">
+                                <Setter Property="AllowAutoHide" Value="False"/>
+                            </Style>
+                            <Style Selector="DataGrid /template/ ScrollBar#PART_VerticalScrollbar">
+                                <Setter Property="AllowAutoHide" Value="True"/>
+                            </Style>					
+                            <Style Selector="DataGrid /template/ DataGridRowsPresenter#PART_RowsPresenter">
+                                <Setter Property="Grid.RowSpan" Value="1" />
+                                <Setter Property="Grid.ColumnSpan" Value="3" />
+                            </Style>
+                        </DataGrid.Styles>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Januar" Binding="{Binding JanuarValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="Februar" Binding="{Binding FebruarValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="März" Binding="{Binding MärzValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="April" Binding="{Binding AprilValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="Mai" Binding="{Binding MaiValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="Juni" Binding="{Binding JuniValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="Juli" Binding="{Binding JuliValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="August" Binding="{Binding AugustValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="September" Binding="{Binding SeptemberValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="Oktober" Binding="{Binding OktoberValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="November" Binding="{Binding NovemberValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="Dezember" Binding="{Binding DezemberValue, Converter={StaticResource DecimalConverter}, StringFormat=C2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 50 0">
+                <ui:ProgressRing IsIndeterminate="True" IsVisible="{Binding IsTaskActive}" 
+                                 Height="20">
+                    <ToolTip.Tip>
+                        Speicherung in der Datenbank erfolgt!
+                    </ToolTip.Tip>
+                </ui:ProgressRing>
+                <Button Content="Speichern" IsEnabled="{Binding !IsTaskActive}"
+                        Command="{Binding CloseWindowCmd}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                    <ToolTip.Tip>
+                        Führt für die geänderten Monate automatisch die Berechnung der Summen durch!
+                    </ToolTip.Tip>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        
+    </Grid>
+
+</Window>
