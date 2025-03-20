@@ -18,16 +18,16 @@ Im Dashboard werden alle Ein- und Ausgaben grafisch dargestellt und farblich anp
 immer anzeigen zu lassen, siehe Bild 2-4.
 
 Dashboard Übersicht
-![Dashboard_Bild_1](https://github.com/user-attachments/assets/ed84d071-136c-4182-9f20-cf799a46a2cd)
+![Dashboard_Bild_1](https://github.com/user-attachments/assets/2a5ba8db-0034-4fd0-9eff-a559b4f932f0)
 
 Dashboard - Einnahmen/Ausgaben Farben anpassen
-![Dashboard_Bild_2](https://github.com/user-attachments/assets/c1ef4f2e-927a-4550-ac56-6daee019ead5)
+![Dashboard_Bild_2](https://github.com/user-attachments/assets/1ce65c4d-274a-4483-8cbb-834c2c779ef7)
 
 Dashboard - Ausgaben nach Kategorie Farben anpassen
-![Dashboard_Bild_3](https://github.com/user-attachments/assets/da5359fc-5a86-4c9f-9d5c-d46c777e1ac6)
+![Dashboard_Bild_3](https://github.com/user-attachments/assets/5cf948f2-886c-413f-a305-604fa2680a90)
 
 Dashboard - Spezielle Posten anpassen
-![Dashbaord_Bild_4](https://github.com/user-attachments/assets/b737296a-f611-40b0-ac3b-7930fe331ddc)
+![Dashbaord_Bild_4](https://github.com/user-attachments/assets/2c03397c-6004-4d52-bb2d-4f5aae2edaf2)
 
 ## Gläubiger ##
 Hier können alle Ausgaben und Einnahmen erfasst werden, welche unregelmäßig sind. Beispielweise, wenn jemand das Tanken übernimmt oder man jemandem Geld 
@@ -35,10 +35,10 @@ leiht. Dies kann hier genau erfasst werden, ggf. sogar mit einer entsprechenden 
 (Aktuell noch im Ausbau, es werden noch Filter hinzugefügt wie z.B. für die Art der Transaktion sowie den PDF-Export nach bezahlt/!bezahlt)
 
 Gläubiger - Übersicht, sowie Bearbeitung
-![Debts_1](https://github.com/user-attachments/assets/e18ccf18-178e-40e3-ae59-acebc409150d)
+![Debts_1](https://github.com/user-attachments/assets/74b2dcb4-5a87-422b-8bf9-4b651fa2ed72)
 
 Gläubiger - Neuer Eintrag
-![Debts_2](https://github.com/user-attachments/assets/ab54c374-60bf-4174-9f60-b2ee5aa2a277)
+![Debts_2](https://github.com/user-attachments/assets/8ebfe37d-4c3c-4634-a526-fd693391709d)
 
 ## Grid ##
 Das Kernelement der Anwendung. Hier ist es möglich, alle Zeilen in der Übersicht von einem Jahr darzustellen. Oder + Anzahl Monate zum Jahresende.
@@ -46,49 +46,49 @@ Zeilen bzw. Zellen können jeweils mit einem Kommentar belegt werden. Alle Werte
 Frequenz von 1 bis 12 Monaten. Sowie die Möglichkeit, eigene Summen bilden zu können, um eine einfache Übersicht bei vielen Posten zu erstellen (siehe Bild 5).
 
 Grid - Darstellung mit Kommentar
-![Grid_Bild_1](https://github.com/user-attachments/assets/e3cdf027-53a0-401b-8b91-aafba459b243)
+![Grid_Bild_1](https://github.com/user-attachments/assets/0e909476-3447-4e86-be69-c0cb8764398e)
 
 Grid - Übersicht von März bis Dezember (+9 Monate, max +12)
-![Grid_Bild_2](https://github.com/user-attachments/assets/a7b395dd-a778-4b87-9a18-d0a130145bba)
+![Grid_Bild_2](https://github.com/user-attachments/assets/695e3dec-5d5a-4f56-b3f3-e6cc1d244bf0)
 
 Grid - Zeile bearbeiten
-![Grid_Bild_3](https://github.com/user-attachments/assets/7cac7997-09a3-40fa-abd6-38d66620f1b2)
+![Grid_Bild_3](https://github.com/user-attachments/assets/5db888af-5808-4465-9447-c964c7fe8bc5)
 
 Grid - Zeile hinzufügen
-![Grid_Bild_4](https://github.com/user-attachments/assets/f3f8fd22-4f08-45fa-9c85-ca2418880747)
+![Grid_Bild_4](https://github.com/user-attachments/assets/d042b09b-3fbe-42c9-ace2-3b46263e82b7)
 
 Grid - Summenzeile hinzufügen mit Berechnung
-![Grid_Bild_5](https://github.com/user-attachments/assets/6b2b9f4f-2a88-4f1f-851b-5885d9e0740f)
+![Grid_Bild_5](https://github.com/user-attachments/assets/ed2474eb-5eaf-461b-98c2-f736ff911294)
 
 Beim Import werden die jeweiligen Werte genommen, welche beim Erstellen der Zeile gesetzt wurden bzw. bei den Importeinstellungen eingetragen wurden
 (siehe Bild 4)
 
 Grid - Import Monatsauswahl
-![Grid_Import_1](https://github.com/user-attachments/assets/d37dd1e7-a503-434a-bab8-9d37cb448881)
+![Grid_Import_1](https://github.com/user-attachments/assets/9179dec9-9f21-4d24-abd7-71cdeb7b4db4)
 
 Grid - Definierte Zeilen importieren
-![Grid_Import_2](https://github.com/user-attachments/assets/236f9a9a-a8dc-416d-83b9-1b7ebd043b92)
+![Grid_Import_2](https://github.com/user-attachments/assets/3297131a-3a9c-4fcf-b777-264c372a0f4b)
 
 Grid - Kontostand importieren
-![Grid_Import_3](https://github.com/user-attachments/assets/806f737c-7798-4430-8188-ee30982c1917)
+![Grid_Import_3](https://github.com/user-attachments/assets/30ca506e-a689-44e9-a979-bdd0e87a4587)
 
 Grid - Importwerte anpassen (Einstellungen)
-![Grid_Import_4](https://github.com/user-attachments/assets/b669883e-ec91-4144-b798-c8dba46e7edb)
+![Grid_Import_4](https://github.com/user-attachments/assets/7cab62c1-c1ba-49b0-aaea-a289da0c1fd7)
 
 ## Settings ##
 Bei den Settings sind aktuell die Importwerte sowie die Benutzerverwaltung erfasst. Weiteres folgt.
 
 Settings - Neuen Benutzer anlegen
-![Settings_1](https://github.com/user-attachments/assets/e8384e31-1a93-434b-aadf-c1f368e0e94b)
+![Settings_1](https://github.com/user-attachments/assets/54bef053-8b30-4211-91cb-eddf8b789c53)
 
 Settings - Benutzer bearbeiten
 ** Benutzer mit der Administrator-Rolle können Nutzerdaten sowie Rollen anpassen, aber das jeweilige Passwort bleibt verschlüsselt.
-![Settings_2](https://github.com/user-attachments/assets/a8235191-5f00-4b8a-bda5-6089e1de96e2)
+![Settings_2](https://github.com/user-attachments/assets/5731e3b7-cc7b-4356-aeb9-a9e92f3d1ad4)
 
 Settings - Anmeldung
 ** Da die Datenbank aktuell lokal gehostet wird, ist das IPv4-Feld leer. Wenn dies z.B. zu Azure gewechselt wird, ist
 hier eine Möglichkeit der einfachen Darstellung ggf. mit einem Button (sichtbar/unsichtbar) machen.
-![Settings_3](https://github.com/user-attachments/assets/666289bb-99e3-4c32-9b75-72791ef9d049)
+![Settings_3](https://github.com/user-attachments/assets/85112a73-7787-4f82-8b48-f905d2813bae)
 
 ** Geplante Erweiterungen **
 - Prognose über bestimmte Kategorien, d.h. wie verhalten sich manche Posten über das Jahr (Hoch- und Tiefwerte)
